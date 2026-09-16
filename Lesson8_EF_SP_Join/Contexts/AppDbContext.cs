@@ -19,12 +19,17 @@ public class AppDbContext : DbContext
 
         var connectionString = configRoot.GetConnectionString("SqlServer");
 
-        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-
         optionsBuilder.UseSqlServer(connectionString);
 
         base.OnConfiguring(optionsBuilder);
     }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Program).Assembly);
+
+        base.OnModelCreating(modelBuilder);
+    }
+
 
     public override int SaveChanges()
     {
